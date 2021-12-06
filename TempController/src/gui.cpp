@@ -36,6 +36,15 @@ void GUI_Init()
     lv_indev_drv_register(&indev_drv);
 }
 
+void GUI_Run(void *parm)
+{
+    for (;;)
+    {
+        lv_task_handler();
+        delay(5);
+    }
+}
+
 void my_print(lv_log_level_t level, const char *file, uint32_t line, const char *fn_name, const char *dsc)
 {
     Serial.printf("%s(%s)@%d->%s", file, fn_name, line, dsc);

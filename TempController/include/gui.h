@@ -5,3 +5,5 @@
 #include "lvgl.h"
 
 void GUI_Init();
+
+void GUI_Run(void *parm);
