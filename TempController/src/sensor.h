@@ -6,5 +6,5 @@
 void Sensor_Init();
 void Sensor_Read(void *parm);
 
-extern OneWire ds(SENSOR_Pin);
+extern OneWire ds;
 extern float temperature;
