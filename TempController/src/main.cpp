@@ -3,12 +3,15 @@
 #include "main.h"
 #include "freertos/FreeRTOS.h"
 #include "sensor.h"
+#include "gui.h"
 
 void setup()
 {
     Serial.begin(115200);
-    Sensor_Init();
 
+    GUI_Init();
+
+    Sensor_Init();
     xTaskCreate(Sensor_Read, "Sensor_Read", 4096, NULL, 3, NULL);
 }
 
