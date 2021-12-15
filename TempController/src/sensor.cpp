@@ -2,6 +2,7 @@
 #include "OneWire.h"
 #include <DallasTemperature.h>
 #include "Arduino.h"
+#include "wireless.h"
 
 OneWire oneWire(SENSOR_Pin);
 DallasTemperature sensors(&oneWire);
@@ -28,6 +29,7 @@ void Sensor_Read(void *parm)
             Serial.print("Temperature for the device 1 (index 0) is: ");
             Serial.printf("%f\n", temp);
             temperature = temp;
+            SendTemperature(temperature);
         }
         else
         {

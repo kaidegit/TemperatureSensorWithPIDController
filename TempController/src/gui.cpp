@@ -1,11 +1,12 @@
 #include "gui.h"
+#include "esp_task_wdt.h"
 
 TFT_eSPI tft;
-static lv_disp_draw_buf_t draw_buf;
-static lv_color_t buf[TFT_WIDTH * 10];
+static lv_disp_buf_t disp_buf;
+static lv_color_t buf[LV_HOR_RES_MAX * 10] = {0};
 
 void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p);
-void my_button_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data);
+bool my_button_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data);
 void my_print(lv_log_level_t level, const char *file, uint32_t line, const char *fn_name, const char *dsc);
 
 void GUI_Init()
@@ -16,32 +17,34 @@ void GUI_Init()
 
     tft.begin(); // 初始化TFT
     tft.setRotation(3);
+    tft.invertDisplay(0);
+    tft.fillScreen(TFT_WHITE);
 
-    lv_disp_draw_buf_init(&draw_buf, buf, NULL, TFT_WIDTH * 10); // 注册buffer
+    lv_disp_buf_init(&disp_buf, buf, NULL, LV_HOR_RES_MAX * 10); // 注册buffer
 
     // 注册屏幕组件
     static lv_disp_drv_t disp_drv;
     lv_disp_drv_init(&disp_drv);
-    disp_drv.hor_res = TFT_WIDTH;
-    disp_drv.ver_res = TFT_HEIGHT;
+    disp_drv.hor_res = TFT_HEIGHT;
+    disp_drv.ver_res = TFT_WIDTH;
     disp_drv.flush_cb = my_disp_flush;
-    disp_drv.draw_buf = &draw_buf;
+    disp_drv.buffer = &disp_buf;
     lv_disp_drv_register(&disp_drv);
 
-    // 注册输入组件
-    static lv_indev_drv_t indev_drv;
-    lv_indev_drv_init(&indev_drv);
-    indev_drv.type = LV_INDEV_TYPE_ENCODER;
-    indev_drv.read_cb = my_button_read;
-    lv_indev_drv_register(&indev_drv);
+    // // 注册输入组件
+    // static lv_indev_drv_t indev_drv;
+    // lv_indev_drv_init(&indev_drv);
+    // indev_drv.type = LV_INDEV_TYPE_ENCODER;
+    // indev_drv.read_cb = my_button_read;
+    // lv_indev_drv_register(&indev_drv);
 }
 
 void GUI_Run(void *parm)
 {
-    for (;;)
-    {
+    while (true){
         lv_task_handler();
-        delay(5);
+        esp_task_wdt_reset();
+        delay(10);
     }
 }
 
@@ -61,11 +64,12 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
     tft.setAddrWindow(area->x1, area->y1, w, h);
     tft.pushColors((uint16_t *)&color_p->full, w * h, true);
     tft.endWrite();
+    Serial.printf("flash screen\n");
 
     lv_disp_flush_ready(disp);
 }
 
-void my_button_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
+bool my_button_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
 {
     // TODO
     // if (digitalRead(WIO_KEY_B) == LOW)
