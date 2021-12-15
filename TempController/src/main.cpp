@@ -5,6 +5,8 @@
 #include "gui.h"
 #include "esp_now.h"
 #include "gui_guider.h"
+#include "wireless.h"
+#include "WiFi.h"
 
 lv_ui guider_ui;
 lv_chart_series_t *screen_chart_1_0;
@@ -13,9 +15,14 @@ void setup()
 {
     // static lv_chart_series_t *ser1 = lv_chart_add_series(guider_ui.screen_chart_1, lv_color_make(0x00, 0x00, 0x00));
     Serial.begin(115200);
+    
     // Serial.println("HelloWorld");
     GUI_Init();
     setup_ui(&guider_ui);
+
+    WiFi.mode(WIFI_STA);
+    ESPNow_Init();
+
     // Sensor_Init();
 
     // xTaskCreate(Sensor_Read, "Sensor_Read_Task", 4096, NULL, 3, NULL);
@@ -25,14 +32,6 @@ void setup()
     // tft.invertDisplay(0);
 
     xTaskCreate(GUI_Run, "GUI_Task", 4096 * 4, NULL, 3, NULL);
-    // ser1->points[0] = 10;
-    // ser1->points[1] = 20;
-    // ser1->points[2] = 30;
-    // ser1->points[3] = 40;
-    // ser1->points[4] = 50;
-    // // lv_chart_refresh(guider_ui.screen_chart_1);
-    // // lv_chart_set_next(guider_ui.screen_chart_1, ser1, 20);
-    // lv_chart_refresh(guider_ui.screen_chart_1);
     screen_chart_1_0 = lv_chart_add_series(guider_ui.screen_chart_1, lv_color_make(0x00, 0x00, 0x00));
     lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, 12);
     lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, 32);
@@ -54,5 +53,6 @@ void loop()
 
     // lv_task_handler();
     // delay(5);
-    delay(10);
+    delay(100);
+    SendTemperature(12.34);
 }
