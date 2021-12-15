@@ -14,16 +14,29 @@ extern "C" {
 
 typedef struct
 {
+	lv_obj_t *pid;
+	lv_obj_t *pid_label_1;
+	lv_obj_t *pid_label_2;
+	lv_obj_t *pid_label_3;
+	lv_obj_t *pid_P_value;
+	lv_obj_t *pid_I_value;
+	lv_obj_t *pid_target;
 	lv_obj_t *screen;
 	lv_obj_t *screen_chart_1;
 	lv_obj_t *screen_label_1;
 	lv_obj_t *screen_label_2;
 	lv_obj_t *screen_temp_label;
+	lv_obj_t *alarm;
+	lv_obj_t *alarm_lmeter_1;
+	lv_obj_t *alarm_label_1;
+	lv_obj_t *alarm_set_temperature;
 }lv_ui;
 
 void setup_ui(lv_ui *ui);
 extern lv_ui guider_ui;
+void setup_scr_pid(lv_ui *ui);
 void setup_scr_screen(lv_ui *ui);
+void setup_scr_alarm(lv_ui *ui);
 
 #ifdef __cplusplus
 }
