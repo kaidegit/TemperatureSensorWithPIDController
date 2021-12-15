@@ -7,3 +7,5 @@
 void GUI_Init();
 
 void GUI_Run(void *parm);
+
+extern TFT_eSPI tft;

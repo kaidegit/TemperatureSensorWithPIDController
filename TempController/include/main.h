@@ -1,3 +1,3 @@
 #pragma once
 
-#define SENSOR_Pin 10
+#define SENSOR_Pin 14
