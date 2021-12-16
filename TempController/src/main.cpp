@@ -26,20 +26,19 @@ void setup()
 
     ESPNow_Init();
 
-    // Sensor_Init();
-
-    // xTaskCreate(Sensor_Read, "Sensor_Read_Task", 4096, NULL, 3, NULL);
+    Sensor_Init();
+    xTaskCreate(Sensor_Read, "Sensor_Read_Task", 4096, NULL, 3, NULL);
 
     // tft.begin(); // 初始化TFT
     // tft.setRotation(3);
     // tft.invertDisplay(0);
 
     screen_chart_1_0 = lv_chart_add_series(guider_ui.screen_chart_1, lv_color_make(0x00, 0x00, 0x00));
-    lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, 12);
-    lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, 32);
-    lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, 90);
-    lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, 23);
-    lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, 32);
+    // lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, 12);
+    // lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, 32);
+    // lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, 90);
+    // lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, 23);
+    // lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, 32);
 }
 
 void loop()
@@ -56,5 +55,5 @@ void loop()
     // lv_task_handler();
     // delay(5);
     delay(100);
-    SendTemperature(12.34);
+    // SendTemperature(12.34);
 }

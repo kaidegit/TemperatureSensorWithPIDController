@@ -3,6 +3,8 @@
 #include <DallasTemperature.h>
 #include "Arduino.h"
 #include "wireless.h"
+#include "esp_task_wdt.h"
+#include "gui_guider.h"
 
 OneWire oneWire(SENSOR_Pin);
 DallasTemperature sensors(&oneWire);
@@ -22,7 +24,10 @@ void Sensor_Read(void *parm)
     while (true)
     {
         sensors.requestTemperatures(); // Send the command to get temperatures
-        delay(1000);
+        esp_task_wdt_reset();
+        delay(500);
+        esp_task_wdt_reset();
+        delay(500);
         auto temp = sensors.getTempCByIndex(0);
         if (temp != DEVICE_DISCONNECTED_C)
         {
@@ -30,11 +35,13 @@ void Sensor_Read(void *parm)
             Serial.printf("%f\n", temp);
             temperature = temp;
             SendTemperature(temperature);
+            lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, int16_t(temperature));
         }
         else
         {
             Serial.println("Error: Could not read temperature data");
         }
+        esp_task_wdt_reset();
         delay(500);
     }
 }
