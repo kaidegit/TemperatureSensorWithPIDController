@@ -4,5 +4,11 @@
 
 #define SENSOR_Pin 14
 
+#define BTN_1_Pin 4
+#define BTN_2_Pin 16
+#define BTN_3_Pin 17
+
+#define BEEPER_Pin 26
+
 extern lv_ui guider_ui;
 extern lv_chart_series_t *screen_chart_1_0;
