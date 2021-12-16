@@ -9,6 +9,7 @@ esp_now_peer_info_t slave;
 
 void ESPNow_Init()
 {
+    WiFi.mode(WIFI_STA);
     esp_err_t ret = esp_now_init();
     WiFi.disconnect();
     if (ret != ESP_OK)
@@ -25,8 +26,9 @@ void ESPNow_Init()
             Serial.println("esp now paired falied");
             ESP.restart();
         }
-    }else{
-
+    }
+    else
+    {
     }
 }
 

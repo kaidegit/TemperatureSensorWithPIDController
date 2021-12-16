@@ -13,14 +13,17 @@ lv_chart_series_t *screen_chart_1_0;
 
 void setup()
 {
+    pinMode(26, OUTPUT);
+    digitalWrite(26, HIGH);
     // static lv_chart_series_t *ser1 = lv_chart_add_series(guider_ui.screen_chart_1, lv_color_make(0x00, 0x00, 0x00));
     Serial.begin(115200);
-    
+
     // Serial.println("HelloWorld");
     GUI_Init();
     setup_ui(&guider_ui);
+    xTaskCreate(GUI_Run, "GUI_Task", 4096 * 4, NULL, 3, NULL);
 
-    WiFi.mode(WIFI_STA);
+
     ESPNow_Init();
 
     // Sensor_Init();
@@ -31,7 +34,6 @@ void setup()
     // tft.setRotation(3);
     // tft.invertDisplay(0);
 
-    xTaskCreate(GUI_Run, "GUI_Task", 4096 * 4, NULL, 3, NULL);
     screen_chart_1_0 = lv_chart_add_series(guider_ui.screen_chart_1, lv_color_make(0x00, 0x00, 0x00));
     lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, 12);
     lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, 32);
