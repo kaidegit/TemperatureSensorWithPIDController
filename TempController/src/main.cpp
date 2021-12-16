@@ -10,11 +10,21 @@
 
 lv_ui guider_ui;
 lv_chart_series_t *screen_chart_1_0;
+int32_t alarm_value;
+bool alarm_flag;
+int16_t kp,ki,target;
+bool pid_flag;
 
 void setup()
 {
+    alarm_value = 50;
+    alarm_flag = false;
+    kp = 0;
+    ki = 0;
+    target = 0;
+    pid_flag = false;
+
     Beeper_Init();
-    Btn_Init();
 
     Serial.begin(115200);
     // Serial.println("HelloWorld");

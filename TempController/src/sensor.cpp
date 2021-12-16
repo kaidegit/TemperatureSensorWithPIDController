@@ -1,3 +1,4 @@
+#include "sensor.h"
 #include "main.h"
 #include "OneWire.h"
 #include <DallasTemperature.h>

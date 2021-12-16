@@ -12,3 +12,7 @@
 
 extern lv_ui guider_ui;
 extern lv_chart_series_t *screen_chart_1_0;
+extern int32_t alarm_value;
+extern bool alarm_flag;
+extern int16_t kp, ki, target;
+extern bool pid_flag;
