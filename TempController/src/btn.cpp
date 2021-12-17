@@ -159,13 +159,16 @@ void Btn_Scan(void *parm)
                             break;
                         case 2:
                             pid_set_state = 0;
-                            pid_flag = true;
+
                             kp = pid_kp;
                             ki = pid_ki;
                             target = pid_target;
                             PID_Reset();
                             // TODO go back to main and cal pid
                             lv_scr_load(guider_ui.screen);
+                            esp_task_wdt_reset();
+                            delay(100);
+                            pid_flag = true;
                             break;
                         default:
                             break;

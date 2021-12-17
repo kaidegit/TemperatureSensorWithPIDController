@@ -2,7 +2,7 @@
 
 void Heater_Init()
 {
-    ledcSetup(0, 1800, 10);
+    ledcSetup(0, 180, 10);
     ledcAttachPin(HEAT_Pin, 0);
     ledcWrite(0, 0);
 }
