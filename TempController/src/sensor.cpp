@@ -21,6 +21,7 @@ void Sensor_Init()
 
 void Sensor_Read(void *parm)
 {
+    uint8_t retry = 0;
     while (true)
     {
         sensors.requestTemperatures(); // Send the command to get temperatures
@@ -28,23 +29,31 @@ void Sensor_Read(void *parm)
         delay(500);
         esp_task_wdt_reset();
         delay(500);
-        auto temp = sensors.getTempCByIndex(0);
-        if (temp != DEVICE_DISCONNECTED_C)
+        while (retry < 10)
         {
-            char ch[30];
-            sprintf(ch, "%.2f", temp);
-            Serial.print("Temperature for the device 1 (index 0) is: ");
-            Serial.printf("%f\n", temp);
-            temperature = temp;
-            sprintf(ch, "%.2f", temperature);
-            SendTemperature(temperature);
-            lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, int16_t(temperature));
-            lv_label_set_text(guider_ui.screen_temp_label, ch);
+            auto temp = sensors.getTempCByIndex(0);
+            if (temp != DEVICE_DISCONNECTED_C)
+            {
+                char ch[30];
+                sprintf(ch, "%.2f", temp);
+                Serial.print("Temperature for the device 1 (index 0) is: ");
+                Serial.printf("%f\n", temp);
+                temperature = temp;
+                sprintf(ch, "%.2f", temperature);
+                SendTemperature(temperature);
+                lv_chart_set_next(guider_ui.screen_chart_1, screen_chart_1_0, int16_t(temperature));
+                lv_label_set_text(guider_ui.screen_temp_label, ch);
+                break;
+            }
+            else
+            {
+                retry++;
+                esp_task_wdt_reset();
+                delay(100);
+                Serial.println("Error: Could not read temperature data");
+            }
         }
-        else
-        {
-            Serial.println("Error: Could not read temperature data");
-        }
+        retry = 0;
         esp_task_wdt_reset();
         delay(500);
     }
