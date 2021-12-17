@@ -17,3 +17,4 @@ void setup_ui(lv_ui *ui)
     setup_scr_pid(ui);
     lv_scr_load(ui->screen);
 }
+ 

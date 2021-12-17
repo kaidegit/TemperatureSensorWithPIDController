@@ -7,24 +7,29 @@
 #include "wireless.h"
 #include "beeper.h"
 #include "btn.h"
+#include "pid.h"
+#include "heat.h"
+#include "esp_task_wdt.h"
 
 lv_ui guider_ui;
 lv_chart_series_t *screen_chart_1_0;
 int32_t alarm_value;
 bool alarm_flag;
-int16_t kp,ki,target;
+int16_t kp, ki, target;
 bool pid_flag;
 
 void setup()
 {
     alarm_value = 50;
     alarm_flag = false;
-    kp = 0;
-    ki = 0;
+    kp = 1;
+    ki = 1;
     target = 0;
     pid_flag = false;
 
     Beeper_Init();
+    Heater_Init();
+    PID_Init();
 
     Serial.begin(115200);
     // Serial.println("HelloWorld");
@@ -45,17 +50,36 @@ void setup()
 
 void loop()
 {
-    // tft.fillScreen(TFT_RED);
-    // delay(1000);
-    // tft.fillScreen(TFT_GREEN);
-    // delay(1000);
-    // tft.fillScreen(TFT_BLUE);
-    // delay(1000);
-    // tft.fillScreen(TFT_BLACK);
-    // delay(1000);
-
     // lv_task_handler();
     // delay(5);
-    delay(100);
+
     // SendTemperature(12.34);
+
+    if (alarm_flag && (temperature > alarm_value))
+    {
+        Beeper_On();
+    }
+    else
+    {
+        Beeper_Off();
+    }
+
+    if (pid_flag)
+    {
+        auto heat = PID_Calculate(temperature);
+        if (heat < 0)
+        {
+            heat = 0;
+        }
+        else if (heat > 99)
+        {
+            heat = 99;
+        }
+        Heater_SetDuty(heat);
+    }else{
+        Heater_SetDuty(0);
+    }
+
+    esp_task_wdt_reset();
+    delay(10);
 }

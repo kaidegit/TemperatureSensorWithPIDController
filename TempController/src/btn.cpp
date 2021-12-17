@@ -2,6 +2,7 @@
 #include "gui_guider.h"
 #include "esp_task_wdt.h"
 #include "sensor.h"
+#include "pid.h"
 
 void Btn_Init()
 {
@@ -26,7 +27,7 @@ void Btn_Scan(void *parm)
             btn1 = digitalRead(BTN_1_Pin);
             btn2 = digitalRead(BTN_2_Pin);
             btn3 = digitalRead(BTN_3_Pin);
-            Serial.printf("%d %d %d\n", btn1, btn2, btn3);
+            Serial.printf("btns' states : %d %d %d\n", btn1, btn2, btn3);
             if ((btn1 == LOW) || (btn2 == LOW) || (btn3 == LOW))
             {
                 auto now_scr = lv_scr_act();
@@ -35,23 +36,28 @@ void Btn_Scan(void *parm)
                     if (btn1 == LOW) // 跳转到alarm
                     {
                         lv_scr_load(guider_ui.alarm);
+                        alarm_value = int(temperature);
+                        lv_linemeter_set_value(guider_ui.alarm_lmeter_1, alarm_value);
+                        char ch[30];
+                        sprintf(ch, "%d", alarm_value);
+                        lv_label_set_text(guider_ui.alarm_set_temperature, ch);
                         alarm_flag = false;
                         pid_flag = false;
                     }
                     else if (btn2 == LOW) // 跳转到pid
                     {
-                        Serial.printf("goto pid\n");
+                        // Serial.printf("goto pid\n");
                         lv_scr_load(guider_ui.pid);
                         pid_set_state = 0;
                         pid_kp = 1;
-                        pid_ki = 0;
+                        pid_ki = 1;
                         pid_target = int(temperature);
                         char ch[30];
                         sprintf(ch, "%d", pid_kp);
                         lv_textarea_set_text(guider_ui.pid_P_value, ch);
-                        sprintf(ch, "%d", pid_kp);
+                        sprintf(ch, "%d", pid_ki);
                         lv_textarea_set_text(guider_ui.pid_I_value, ch);
-                        sprintf(ch, "%d", pid_kp);
+                        sprintf(ch, "%d", pid_target);
                         lv_textarea_set_text(guider_ui.pid_target, ch);
                         lv_textarea_set_cursor_hidden(guider_ui.pid_P_value, false);
                         lv_textarea_set_cursor_hidden(guider_ui.pid_I_value, true);
@@ -62,6 +68,7 @@ void Btn_Scan(void *parm)
                 }
                 else if (now_scr == guider_ui.alarm)
                 {
+                    // not tested yet
                     if (btn1 == LOW) // 减小报警数值
                     {
                         alarm_value--;
@@ -86,7 +93,6 @@ void Btn_Scan(void *parm)
                 }
                 else if (now_scr == guider_ui.pid)
                 {
-                    //TODO
                     if (btn1 == LOW) // 减小数值
                     {
                         switch (pid_set_state)
@@ -157,6 +163,7 @@ void Btn_Scan(void *parm)
                             kp = pid_kp;
                             ki = pid_ki;
                             target = pid_target;
+                            PID_Reset();
                             // TODO go back to main and cal pid
                             lv_scr_load(guider_ui.screen);
                             break;
