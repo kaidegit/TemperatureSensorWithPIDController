@@ -4,6 +4,8 @@
         "lv_font.h": "c",
         "gui_guider.h": "c",
         "*.tcc": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp"
     }
 }

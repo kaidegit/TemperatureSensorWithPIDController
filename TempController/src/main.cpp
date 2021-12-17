@@ -17,6 +17,7 @@ int32_t alarm_value;
 bool alarm_flag;
 int16_t kp, ki, target;
 bool pid_flag;
+bool i_enabled_flag;
 
 void setup()
 {
@@ -26,6 +27,7 @@ void setup()
     ki = 1;
     target = 0;
     pid_flag = false;
+    i_enabled_flag = true;
 
     Beeper_Init();
     Heater_Init();
@@ -37,7 +39,7 @@ void setup()
     GUI_Init();
     setup_ui(&guider_ui);
     screen_chart_1_0 = lv_chart_add_series(guider_ui.screen_chart_1, lv_color_make(0x00, 0x00, 0x00));
-    xTaskCreate(GUI_Run, "GUI_Task", 4096 * 4, NULL, 3, NULL);
+    xTaskCreate(GUI_Run, "GUI_Task", 4096 * 4, NULL, 2, NULL);
 
     Btn_Init();
     xTaskCreate(Btn_Scan, "Btn_Scan_Task", 4096, NULL, 3, NULL);
@@ -45,7 +47,7 @@ void setup()
     ESPNow_Init();
 
     Sensor_Init();
-    xTaskCreate(Sensor_Read, "Sensor_Read_Task", 4096, NULL, 3, NULL);
+    xTaskCreate(Sensor_Read, "Sensor_Read_Task", 4096, NULL, 1, NULL);
 }
 
 void loop()
@@ -71,15 +73,20 @@ void loop()
         {
             heat = 0;
         }
-        else if (heat > 99)
+        else if (heat > 100)
         {
-            heat = 99;
+            heat = 100;
         }
         Heater_SetDuty(heat);
-    }else{
+        char ch[30];
+        sprintf(ch, "pidout:%d", int(heat));
+        lv_label_set_text(guider_ui.screen_state, ch);
+    }
+    else
+    {
         Heater_SetDuty(0);
     }
 
     esp_task_wdt_reset();
-    delay(10);
+    delay(200);
 }

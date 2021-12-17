@@ -11,7 +11,7 @@ void PID_Init()
     target = 0;
     sum_err = 0;
     last_err = 0;
-    tao = 0.01;
+    tao = 0.5;
 }
 
 void PID_Reset()

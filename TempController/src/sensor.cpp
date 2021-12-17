@@ -32,7 +32,7 @@ void Sensor_Read(void *parm)
         while (retry < 10)
         {
             auto temp = sensors.getTempCByIndex(0);
-            if (temp != DEVICE_DISCONNECTED_C)
+            if ((temp != DEVICE_DISCONNECTED_C) && (temp != 85))
             {
                 char ch[30];
                 sprintf(ch, "%.2f", temp);

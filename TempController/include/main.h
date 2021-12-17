@@ -18,3 +18,4 @@ extern int32_t alarm_value;
 extern bool alarm_flag;
 extern int16_t kp, ki, target;
 extern bool pid_flag;
+extern bool i_enabled_flag;

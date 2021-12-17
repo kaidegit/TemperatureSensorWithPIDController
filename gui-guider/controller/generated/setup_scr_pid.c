@@ -215,7 +215,7 @@ void setup_scr_pid(lv_ui *ui){
 	lv_obj_add_style(ui->pid_I_value, LV_PAGE_PART_EDGE_FLASH, &style_pid_I_value_edge_flash);
 	lv_obj_set_pos(ui->pid_I_value, 175, 99);
 	lv_obj_set_size(ui->pid_I_value, 123, 24);
-	lv_textarea_set_text(ui->pid_I_value,"32767");
+	lv_textarea_set_text(ui->pid_I_value,"0");
 	lv_obj_set_event_cb(ui->pid_I_value, text_area_event_cb);
 	lv_textarea_set_text_align(ui->pid_I_value, LV_LABEL_ALIGN_LEFT);
 

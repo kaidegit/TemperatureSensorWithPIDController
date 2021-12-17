@@ -23,6 +23,7 @@ typedef struct
 	lv_obj_t *screen_btn_alarm_label;
 	lv_obj_t *screen_btn_pid;
 	lv_obj_t *screen_btn_pid_label;
+	lv_obj_t *screen_state;
 	lv_obj_t *pid;
 	lv_obj_t *pid_label_1;
 	lv_obj_t *pid_label_2;
