@@ -39,15 +39,15 @@ void setup()
     GUI_Init();
     setup_ui(&guider_ui);
     screen_chart_1_0 = lv_chart_add_series(guider_ui.screen_chart_1, lv_color_make(0x00, 0x00, 0x00));
-    xTaskCreate(GUI_Run, "GUI_Task", 4096 * 4, NULL, 2, NULL);
+    xTaskCreatePinnedToCore(GUI_Run, "GUI_Task", 4096 * 4, NULL, 2, NULL, 1);
 
     Btn_Init();
     xTaskCreate(Btn_Scan, "Btn_Scan_Task", 4096, NULL, 3, NULL);
 
-    ESPNow_Init();
-
     Sensor_Init();
     xTaskCreate(Sensor_Read, "Sensor_Read_Task", 4096, NULL, 1, NULL);
+
+    ESPNow_Init();
 }
 
 void loop()

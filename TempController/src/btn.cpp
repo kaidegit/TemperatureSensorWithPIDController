@@ -164,7 +164,6 @@ void Btn_Scan(void *parm)
                             ki = pid_ki;
                             target = pid_target;
                             PID_Reset();
-                            // TODO go back to main and cal pid
                             lv_scr_load(guider_ui.screen);
                             esp_task_wdt_reset();
                             delay(100);
