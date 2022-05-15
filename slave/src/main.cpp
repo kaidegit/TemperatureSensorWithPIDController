@@ -1,6 +1,6 @@
 #include "Arduino.h"
 #include "main.h"
-#include "wireless_slaver.h"
+#include "wireless_slave.h"
 #include "oled.h"
 
 void setup()

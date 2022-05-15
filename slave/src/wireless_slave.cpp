@@ -1,4 +1,4 @@
-#include "wireless_slaver.h"
+#include "wireless_slave.h"
 #include "oled.h"
 #include "WiFi.h"
 

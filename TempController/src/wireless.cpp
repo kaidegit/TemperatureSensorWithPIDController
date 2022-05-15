@@ -15,7 +15,7 @@ void ESPNow_Init()
     if (ret != ESP_OK)
     {
         Serial.println("esp now init falied");
-        ESP.restart();
+        // ESP.restart();
     }
     ScanForSlave();
     if (slave.channel == CHANNEL)
@@ -24,7 +24,7 @@ void ESPNow_Init()
         if (!isPaired)
         {
             Serial.println("esp now paired falied");
-            ESP.restart();
+            // ESP.restart();
         }
     }
     else
